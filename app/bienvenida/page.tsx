@@ -62,24 +62,18 @@ export default function BienvenidaPage() {
           Tu plataforma de películas. Regístrate gratis para acceder al catálogo completo.
         </p>
         <div className="flex gap-4">
-          <button
-            onClick={() => openMode('register')}
-            onPointerDown={() => openMode('register')}
-            tabIndex={0}
-            style={{ cursor: 'pointer', zIndex: 10, position: 'relative' }}
-            className="bg-blue-600 text-white font-bold px-8 py-4 rounded-xl text-base outline-none focus:ring-4 focus:ring-blue-400"
+          <a
+            href="/login?mode=register"
+            style={{ cursor: 'pointer', zIndex: 10, position: 'relative', display: 'inline-block', backgroundColor: '#2563eb', color: 'white', fontWeight: 'bold', padding: '16px 32px', borderRadius: '12px', textDecoration: 'none', fontSize: '16px' }}
           >
             Crear cuenta
-          </button>
-          <button
-            onClick={() => openMode('login')}
-            onPointerDown={() => openMode('login')}
-            tabIndex={0}
-            style={{ cursor: 'pointer', zIndex: 10, position: 'relative' }}
-            className="bg-gray-800 text-white font-semibold px-8 py-4 rounded-xl text-base outline-none focus:ring-4 focus:ring-blue-400"
+          </a>
+          <a
+            href="/login"
+            style={{ cursor: 'pointer', zIndex: 10, position: 'relative', display: 'inline-block', backgroundColor: '#1f2937', color: 'white', fontWeight: '600', padding: '16px 32px', borderRadius: '12px', textDecoration: 'none', fontSize: '16px' }}
           >
             Ingresar
-          </button>
+          </a>
         </div>
       </div>
 

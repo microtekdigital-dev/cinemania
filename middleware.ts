@@ -25,7 +25,7 @@ export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   // Rutas públicas (landing)
-  const isPublic = pathname === '/bienvenida';
+  const isPublic = pathname === '/bienvenida' || pathname === '/login';
 
   if (!user && !isPublic) {
     return NextResponse.redirect(new URL('/bienvenida', request.url));
