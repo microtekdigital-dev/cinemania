@@ -37,3 +37,20 @@ body {
 @media screen and (min-width: 1280px) {
   body { background-color: #030712; }
 }
+
+/* TV Box WebView - fix button interactions */
+button, a {
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(59, 130, 246, 0.3);
+  touch-action: manipulation;
+}
+
+/* Prevent text selection on TV */
+* {
+  -webkit-user-select: none;
+  user-select: none;
+}
+input, textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}
