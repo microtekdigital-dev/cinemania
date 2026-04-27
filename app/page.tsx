@@ -31,10 +31,9 @@ export default async function Home() {
     searchMovies = [];
   }
 
-  const featured =
-    homeData.trending.find(m => m.backdrop && m.trailer) ??
-    homeData.trending[0] ??
-    null;
+  const featured = homeData.trending
+    .filter(m => m.backdrop && m.trailer)
+    .slice(0, 6);
 
   return (
     <main className="min-h-screen bg-gray-950 text-white">
@@ -48,7 +47,7 @@ export default async function Home() {
         </div>
       </header>
       <div className="pt-14">
-        <HeroMovie movie={featured} />
+        <HeroMovie movies={featured} />
       </div>
       <div className="px-4 py-6 space-y-2">
         {continueWatching.length > 0 && (
