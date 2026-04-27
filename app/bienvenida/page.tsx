@@ -64,13 +64,17 @@ export default function BienvenidaPage() {
         <div className="flex gap-4">
           <button
             onClick={() => openMode('register')}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-xl transition text-base"
+            onKeyDown={e => e.key === 'Enter' && openMode('register')}
+            tabIndex={0}
+            className="bg-blue-600 hover:bg-blue-700 focus:bg-blue-700 text-white font-bold px-8 py-4 rounded-xl transition text-base outline-none focus:ring-4 focus:ring-blue-400"
           >
             Crear cuenta
           </button>
           <button
             onClick={() => openMode('login')}
-            className="bg-gray-800 hover:bg-gray-700 text-white font-semibold px-8 py-3 rounded-xl transition text-base"
+            onKeyDown={e => e.key === 'Enter' && openMode('login')}
+            tabIndex={0}
+            className="bg-gray-800 hover:bg-gray-700 focus:bg-gray-700 text-white font-semibold px-8 py-4 rounded-xl transition text-base outline-none focus:ring-4 focus:ring-blue-400"
           >
             Ingresar
           </button>
