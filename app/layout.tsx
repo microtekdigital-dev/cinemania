@@ -17,6 +17,12 @@ const bebas = Bebas_Neue({
 export const metadata: Metadata = {
   title: "Cinemanía - Ver Películas Online",
   description: "Ver películas y series online gratis en español",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Cinemanía",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -24,6 +30,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es" className="h-full antialiased">
       <head>
         <meta name="viewport" content="width=1280" />
+        <meta name="theme-color" content="#030712" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <link rel="manifest" href="/manifest.json" />
       </head>
       <body className={`${inter.variable} ${bebas.variable} ${inter.className} min-h-full flex flex-col bg-gray-950 text-white`} style={{ backgroundColor: '#030712', color: '#ffffff', margin: 0 }}>
         {children}
