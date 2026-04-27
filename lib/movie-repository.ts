@@ -273,3 +273,18 @@ export async function getRelatedMovies(slug: string, genres: string[], limit = 1
     return [];
   }
 }
+
+export async function getWatchHistory(userId: string, limit = 12): Promise<HomeMovie[]> {
+  try {
+    const supabase = createServerClient();
+    const { data } = await supabase
+      .from('watch_history')
+      .select(`watched_at, movies(${HOME_SELECT})`)
+      .eq('user_id', userId)
+      .order('watched_at', { ascending: false })
+      .limit(limit);
+    return ((data ?? []).map((r: any) => r.movies).filter(Boolean)) as HomeMovie[];
+  } catch {
+    return [];
+  }
+}

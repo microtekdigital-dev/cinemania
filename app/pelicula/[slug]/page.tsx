@@ -3,6 +3,8 @@ import SearchBar from '@/components/SearchBar';
 import Footer from '@/components/Footer';
 import UserMenu from '@/components/UserMenu';
 import FavoriteButton from '@/components/FavoriteButton';
+import WatchTracker from '@/components/WatchTracker';
+import ReviewSection from '@/components/ReviewSection';
 import MovieRow from '@/components/MovieRow';
 import { getMovieBySlug, getMovies, getMoviesForSearch, getRelatedMovies } from '@/lib/movie-repository';
 import { notFound } from 'next/navigation';
@@ -122,7 +124,11 @@ export default async function MoviePage({ params }: { params: Promise<{ slug: st
             <MovieRow title="También te puede gustar" movies={related} />
           </div>
         )}
+
+        {/* Reseñas */}
+        <ReviewSection slug={movie.slug} />
       </div>
+      <WatchTracker slug={movie.slug} />
       <Footer />
     </main>
   );

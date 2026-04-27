@@ -51,3 +51,30 @@ CREATE POLICY "Users can insert own favorites"
 CREATE POLICY "Users can delete own favorites"
   ON public.favorites FOR DELETE
   USING (auth.uid() = user_id);
+
+-- Historial de reproducción
+CREATE TABLE IF NOT EXISTS public.watch_history (
+  id         uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id    uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  movie_slug text NOT NULL REFERENCES public.movies(slug) ON DELETE CASCADE,
+  watched_at timestamptz DEFAULT now(),
+  UNIQUE(user_id, movie_slug)
+);
+
+ALTER TABLE public.watch_history ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Users can manage own history" ON public.watch_history FOR ALL USING (auth.uid() = user_id);
+
+-- Reseñas y calificaciones
+CREATE TABLE IF NOT EXISTS public.reviews (
+  id         uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id    uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  movie_slug text NOT NULL REFERENCES public.movies(slug) ON DELETE CASCADE,
+  rating     smallint CHECK (rating BETWEEN 1 AND 5),
+  comment    text,
+  created_at timestamptz DEFAULT now(),
+  UNIQUE(user_id, movie_slug)
+);
+
+ALTER TABLE public.reviews ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Reviews are public" ON public.reviews FOR SELECT USING (true);
+CREATE POLICY "Users can manage own reviews" ON public.reviews FOR ALL USING (auth.uid() = user_id);
