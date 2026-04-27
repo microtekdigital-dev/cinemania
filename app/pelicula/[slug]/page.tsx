@@ -1,12 +1,27 @@
 import Player from '@/components/Player';
 import SearchBar from '@/components/SearchBar';
 import Footer from '@/components/Footer';
-import movies from '@/lib/movies.json';
+import UserMenu from '@/components/UserMenu';
+import { getMovieBySlug, getMovies, getMoviesForSearch } from '@/lib/movie-repository';
 import { notFound } from 'next/navigation';
+
+export async function generateStaticParams() {
+  try {
+    // Obtener las primeras 60 películas mejor valoradas para pre-renderizar
+    const { movies } = await getMovies({ page: 1 });
+    return movies.map(m => ({ slug: m.slug }));
+  } catch {
+    return [];
+  }
+}
 
 export default async function MoviePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const movie = (movies as any[]).find((m) => m.slug === slug);
+  const [movie, searchMovies] = await Promise.all([
+    getMovieBySlug(slug),
+    getMoviesForSearch(),
+  ]);
+
   if (!movie) notFound();
 
   return (
@@ -16,7 +31,8 @@ export default async function MoviePage({ params }: { params: Promise<{ slug: st
         <a href="/" className="shrink-0">
           <img src="/cinemania.png" alt="Cinemanía" className="h-36" />
         </a>
-        <SearchBar movies={(movies as any[]).map(m => ({ slug: m.slug, title: m.title, year: m.year, poster: m.poster, rating: m.rating }))} />
+        <SearchBar movies={searchMovies as any} />
+        <UserMenu />
       </header>
 
       {/* Hero con backdrop */}
@@ -66,7 +82,7 @@ export default async function MoviePage({ params }: { params: Promise<{ slug: st
         {/* Player */}
         <div id="player" className="mb-8">
           <h2 className="text-lg font-bold mb-3">Ver Online</h2>
-          <Player embeds={movie.embeds} slug={movie.slug} />
+          <Player embeds={movie.embeds as any} slug={movie.slug} />
         </div>
 
         {/* Trailer */}
@@ -86,10 +102,10 @@ export default async function MoviePage({ params }: { params: Promise<{ slug: st
 
         {/* Info */}
         <div id="info" className="flex gap-6">
-          <img src={movie.poster} alt={movie.title} className="w-32 rounded-xl shrink-0 shadow-lg hidden sm:block" />
+          <img src={movie.poster ?? undefined} alt={movie.title} className="w-32 rounded-xl shrink-0 shadow-lg hidden sm:block" />
           <div>
             <h2 className="text-lg font-bold mb-2">{movie.title}</h2>
-            {movie.originalTitle && <p className="text-gray-400 text-sm mb-2">{movie.originalTitle}</p>}
+            {movie.original_title && <p className="text-gray-400 text-sm mb-2">{movie.original_title}</p>}
             <p className="text-gray-300 text-sm leading-relaxed">{movie.overview}</p>
           </div>
         </div>

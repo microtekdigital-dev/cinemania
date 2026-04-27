@@ -1,2 +1,2 @@
-import { handlers } from '@/auth';
-export const { GET, POST } = handlers;
+// NextAuth reemplazado por Supabase Auth
+export {};

@@ -1,5 +1,5 @@
 'use client';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import MovieCard from './MovieCard';
 
 const PAGE_SIZE = 60;
@@ -13,36 +13,46 @@ interface Movie {
   genre: string[];
 }
 
-export default function MovieGrid({ movies }: { movies: Movie[] }) {
+interface MovieGridProps {
+  genres: string[];
+  years: string[];
+}
+
+export default function MovieGrid({ genres, years }: MovieGridProps) {
   const [search, setSearch] = useState('');
   const [genre, setGenre] = useState('');
   const [year, setYear] = useState('');
   const [page, setPage] = useState(1);
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   // Reset página al cambiar filtros
-  useEffect(() => { setPage(1); }, [search, genre, year]);
+  useEffect(() => { setPage(1); setMovies([]); }, [search, genre, year]);
 
-  const genres = useMemo(() => {
-    const all = movies.flatMap(m => Array.isArray(m.genre) ? m.genre : []);
-    return [...new Set(all)].filter(Boolean).sort();
-  }, [movies]);
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (search) params.set('search', search);
+    if (genre) params.set('genre', genre);
+    if (year) params.set('year', year);
+    params.set('page', String(page));
 
-  const years = useMemo(() => {
-    const all = movies.map(m => m.year?.toString()).filter(Boolean);
-    return [...new Set(all)].sort((a, b) => Number(b) - Number(a));
-  }, [movies]);
+    setLoading(true);
+    fetch(`/api/movies?${params.toString()}`)
+      .then(r => r.json())
+      .then(data => {
+        if (page === 1) {
+          setMovies(data.movies ?? []);
+        } else {
+          setMovies(prev => [...prev, ...(data.movies ?? [])]);
+        }
+        setTotal(data.total ?? 0);
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, [search, genre, year, page]);
 
-  const filtered = useMemo(() => {
-    return movies.filter(m => {
-      const matchSearch = !search || m.title?.toLowerCase().includes(search.toLowerCase());
-      const matchGenre = !genre || (Array.isArray(m.genre) && m.genre.includes(genre));
-      const matchYear = !year || m.year?.toString() === year;
-      return matchSearch && matchGenre && matchYear;
-    });
-  }, [movies, search, genre, year]);
-
-  const visible = filtered.slice(0, page * PAGE_SIZE);
-  const hasMore = visible.length < filtered.length;
+  const hasMore = movies.length < total;
 
   return (
     <div>
@@ -79,12 +89,12 @@ export default function MovieGrid({ movies }: { movies: Movie[] }) {
           )}
         </div>
         <p className="text-gray-500 text-xs mt-2">
-          Mostrando {visible.length} de {filtered.length} películas
+          {loading ? 'Cargando...' : `Mostrando ${movies.length} de ${total} películas`}
         </p>
       </div>
 
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-3">
-        {visible.map((movie, i) => (
+        {movies.map((movie, i) => (
           <MovieCard key={`${movie.slug}-${i}`} movie={movie} />
         ))}
       </div>
@@ -93,9 +103,10 @@ export default function MovieGrid({ movies }: { movies: Movie[] }) {
         <div className="flex justify-center mt-8">
           <button
             onClick={() => setPage(p => p + 1)}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-lg transition"
+            disabled={loading}
+            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold px-8 py-3 rounded-lg transition"
           >
-            Cargar más ({filtered.length - visible.length} restantes)
+            {loading ? 'Cargando...' : `Cargar más (${total - movies.length} restantes)`}
           </button>
         </div>
       )}
