@@ -2,6 +2,7 @@ import Player from '@/components/Player';
 import SearchBar from '@/components/SearchBar';
 import Footer from '@/components/Footer';
 import UserMenu from '@/components/UserMenu';
+import FavoriteButton from '@/components/FavoriteButton';
 import { getMovieBySlug, getMovies, getMoviesForSearch } from '@/lib/movie-repository';
 import { notFound } from 'next/navigation';
 
@@ -69,6 +70,7 @@ export default async function MoviePage({ params }: { params: Promise<{ slug: st
                   🎬 Trailer
                 </a>
               )}
+              <FavoriteButton slug={movie.slug} />
               <a href="#info" className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-bold px-6 py-3 rounded-lg transition text-sm backdrop-blur">
                 ℹ Info
               </a>

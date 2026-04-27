@@ -51,6 +51,13 @@ export default function UserMenu() {
               <p className="text-xs text-gray-400">Conectado como</p>
               <p className="text-sm text-white truncate">{user.email}</p>
             </div>
+            <a
+              href="/mi-lista"
+              onClick={() => setOpen(false)}
+              className="w-full text-left px-4 py-3 text-sm text-white hover:bg-gray-700 transition flex items-center gap-2"
+            >
+              🎬 Mi Lista
+            </a>
             <button
               onClick={handleLogout}
               className="w-full text-left px-4 py-3 text-sm text-red-400 hover:bg-gray-700 transition"
