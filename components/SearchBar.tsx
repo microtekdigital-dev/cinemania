@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 interface Movie {
   slug: string;
   title: string;
+  original_title?: string | null;
   year: string | null;
   poster: string | null;
   rating: number | null;
@@ -21,9 +22,13 @@ export default function SearchBar({ movies }: { movies: Movie[] }) {
       setOpen(false);
       return;
     }
-    const q = query.toLowerCase();
+    const q = query.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     const found = movies
-      .filter(m => m.title.toLowerCase().includes(q))
+      .filter(m => {
+        const title = m.title.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const orig = (m.original_title || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        return title.includes(q) || orig.includes(q);
+      })
       .slice(0, 8);
     setResults(found);
     setOpen(true);

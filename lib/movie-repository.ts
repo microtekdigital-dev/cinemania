@@ -47,6 +47,7 @@ export interface PaginatedMovies {
 export interface SearchMovie {
   slug: string;
   title: string;
+  original_title: string | null;
   year: string | null;
   poster: string | null;
   rating: number | null;
@@ -246,7 +247,7 @@ export async function getMoviesForSearch(): Promise<SearchMovie[]> {
     while (true) {
       const { data, error } = await supabase
         .from('movies')
-        .select('slug,title,year,poster,rating')
+        .select('slug,title,original_title,year,poster,rating')
         .range(from, from + pageSize - 1);
       if (error || !data || data.length === 0) break;
       all.push(...(data as SearchMovie[]));
