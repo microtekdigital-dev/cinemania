@@ -23,7 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es" className="h-full antialiased">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=1280" />
       </head>
       <body className={`${inter.variable} ${bebas.variable} ${inter.className} min-h-full flex flex-col bg-gray-950 text-white`} style={{ backgroundColor: '#030712', color: '#ffffff', margin: 0 }}>
         {children}

@@ -32,3 +32,8 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* Samsung/LG TV - force dark background always */
+@media screen and (min-width: 1280px) {
+  body { background-color: #030712; }
+}
