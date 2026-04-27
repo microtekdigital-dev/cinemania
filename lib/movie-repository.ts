@@ -257,24 +257,51 @@ export async function getMoviesForSearch(): Promise<SearchMovie[]> {
   }
 }
 
-export async function getRelatedMovies(slug: string, genres: string[], limit = 12): Promise<HomeMovie[]> {
+export async function getRelatedMovies(slug: string, genres: string[], title: string, limit = 12): Promise<HomeMovie[]> {
   try {
     const supabase = createServerClient();
-    if (!genres.length) return [];
-    const { data } = await supabase
-      .from('movies')
-      .select(HOME_SELECT)
-      .overlaps('genre', genres)
-      .neq('slug', slug)
-      .order('rating', { ascending: false })
-      .limit(limit * 3); // traer más para deduplicar
-    // deduplicar por slug
+
+    // Extraer palabras clave del título (ignorar palabras cortas)
+    const titleWords = title
+      .toLowerCase()
+      .replace(/[^a-záéíóúüñ\s]/gi, '')
+      .split(/\s+/)
+      .filter(w => w.length > 3);
+
+    // Buscar por título similar (misma saga) y por género en paralelo
+    const [sagaResult, genreResult] = await Promise.all([
+      titleWords.length > 0
+        ? supabase
+            .from('movies')
+            .select(HOME_SELECT)
+            .ilike('title', `%${titleWords[0]}%`)
+            .neq('slug', slug)
+            .order('rating', { ascending: false })
+            .limit(limit)
+        : Promise.resolve({ data: [] }),
+      genres.length > 0
+        ? supabase
+            .from('movies')
+            .select(HOME_SELECT)
+            .overlaps('genre', genres)
+            .neq('slug', slug)
+            .order('rating', { ascending: false })
+            .limit(limit * 2)
+        : Promise.resolve({ data: [] }),
+    ]);
+
+    // Combinar: primero saga, luego por género, deduplicar
+    const combined = [
+      ...((sagaResult as any).data ?? []),
+      ...((genreResult as any).data ?? []),
+    ];
     const seen = new Set<string>();
-    const unique = (data ?? []).filter((m: any) => {
+    const unique = combined.filter((m: any) => {
       if (seen.has(m.slug)) return false;
       seen.add(m.slug);
       return true;
     });
+
     return unique.slice(0, limit) as HomeMovie[];
   } catch {
     return [];

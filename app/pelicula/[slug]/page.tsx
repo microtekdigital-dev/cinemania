@@ -29,7 +29,7 @@ export default async function MoviePage({ params }: { params: Promise<{ slug: st
 
   if (!movie) notFound();
 
-  const related = await getRelatedMovies(slug, movie.genre ?? []);
+  const related = await getRelatedMovies(slug, movie.genre ?? [], movie.title);
 
   return (
     <main className="min-h-screen bg-gray-950 text-white">
