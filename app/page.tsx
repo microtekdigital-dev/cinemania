@@ -4,11 +4,11 @@ import MovieGrid from '@/components/MovieGrid';
 import SearchBar from '@/components/SearchBar';
 import Footer from '@/components/Footer';
 import UserMenu from '@/components/UserMenu';
-import { getMoviesForHome, getMoviesForSearch, getAllGenres, getAllYears } from '@/lib/movie-repository';
+import { getMoviesForHome, getMoviesForSearch, getAllGenres, getAllYears, type SearchMovie, type HomeMovies } from '@/lib/movie-repository';
 
 export default async function Home() {
-  let homeData;
-  let searchMovies;
+  let homeData: HomeMovies = { trending: [], topRated: [], recent: [], action: [], drama: [] };
+  let searchMovies: SearchMovie[] = [];
   let genres: string[] = [];
   let years: string[] = [];
 

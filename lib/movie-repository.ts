@@ -52,12 +52,23 @@ export interface SearchMovie {
   rating: number | null;
 }
 
+export interface HomeMovie {
+  slug: string;
+  title: string;
+  year: string | null;
+  poster: string | null;
+  backdrop: string | null;
+  rating: number | null;
+  genre: string[];
+  trailer: string | null;
+}
+
 export interface HomeMovies {
-  trending: Partial<Movie>[];
-  topRated: Partial<Movie>[];
-  recent: Partial<Movie>[];
-  action: Partial<Movie>[];
-  drama: Partial<Movie>[];
+  trending: HomeMovie[];
+  topRated: HomeMovie[];
+  recent: HomeMovie[];
+  action: HomeMovie[];
+  drama: HomeMovie[];
 }
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -214,11 +225,11 @@ export async function getMoviesForHome(): Promise<HomeMovies> {
     if (drama.error) console.error('getMoviesForHome drama error:', drama.error);
 
     return {
-      trending: (trending.data ?? []) as Partial<Movie>[],
-      topRated: (topRated.data ?? []) as Partial<Movie>[],
-      recent: (recent.data ?? []) as Partial<Movie>[],
-      action: (action.data ?? []) as Partial<Movie>[],
-      drama: (drama.data ?? []) as Partial<Movie>[],
+      trending: (trending.data ?? []) as HomeMovie[],
+      topRated: (topRated.data ?? []) as HomeMovie[],
+      recent: (recent.data ?? []) as HomeMovie[],
+      action: (action.data ?? []) as HomeMovie[],
+      drama: (drama.data ?? []) as HomeMovie[],
     };
   } catch (err) {
     console.error('getMoviesForHome unexpected error:', err);

@@ -3,19 +3,21 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 interface Movie {
-  slug: string;
-  title: string;
-  year: string;
-  poster: string;
-  backdrop: string;
-  overview: string;
-  rating: string;
-  genre: string[];
-  trailer: string | null;
+  slug?: string;
+  title?: string;
+  year?: string | null;
+  poster?: string | null;
+  backdrop?: string | null;
+  overview?: string | null;
+  rating?: number | null;
+  genre?: string[];
+  trailer?: string | null;
 }
 
-export default function HeroMovie({ movie }: { movie: Movie }) {
+export default function HeroMovie({ movie }: { movie: Movie | null }) {
   const [showTrailer, setShowTrailer] = useState(false);
+
+  if (!movie) return null;
 
   return (
     <div className="relative w-full h-[70vh] min-h-[500px] overflow-hidden">

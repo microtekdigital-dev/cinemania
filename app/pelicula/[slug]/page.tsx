@@ -7,9 +7,10 @@ import { notFound } from 'next/navigation';
 
 export async function generateStaticParams() {
   try {
-    // Obtener las primeras 60 películas mejor valoradas para pre-renderizar
     const { movies } = await getMovies({ page: 1 });
-    return movies.map(m => ({ slug: m.slug }));
+    return movies
+      .filter(m => m.slug && !m.slug.startsWith('http'))
+      .map(m => ({ slug: m.slug }));
   } catch {
     return [];
   }

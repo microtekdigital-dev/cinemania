@@ -4,9 +4,9 @@ import Image from 'next/image';
 interface Movie {
   slug: string;
   title: string;
-  year: string;
-  poster: string;
-  rating: string;
+  year: string | null;
+  poster: string | null;
+  rating: number | null;
 }
 
 export default function MovieCard({ movie }: { movie: Movie }) {

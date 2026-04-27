@@ -7,9 +7,9 @@ const PAGE_SIZE = 60;
 interface Movie {
   slug: string;
   title: string;
-  year: string;
-  poster: string;
-  rating: string;
+  year: string | null;
+  poster: string | null;
+  rating: number | null;
   genre: string[];
 }
 
