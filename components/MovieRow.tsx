@@ -15,7 +15,10 @@ interface Movie {
 export default function MovieRow({ title, movies }: { title: string; movies: Movie[] }) {
   const ref = useRef<HTMLDivElement>(null);
 
-  if (!movies.length) return null;
+  // deduplicar por slug por si acaso
+  const unique = movies.filter((m, i, arr) => arr.findIndex(x => x.slug === m.slug) === i);
+
+  if (!unique.length) return null;
 
   return (
     <div className="mb-8">
@@ -25,7 +28,7 @@ export default function MovieRow({ title, movies }: { title: string; movies: Mov
         className="flex gap-3 overflow-x-auto pb-2 touch-pan-x"
         style={{ WebkitOverflowScrolling: 'touch', msOverflowStyle: 'none', scrollbarWidth: 'none' }}
       >
-        {movies.map(movie => (
+        {unique.map(movie => (
           <Link key={movie.slug} href={`/pelicula/${movie.slug}`} className="shrink-0 w-28 sm:w-36 group">
             <div className="relative aspect-[2/3] rounded-lg overflow-hidden bg-gray-800">
               {movie.poster ? (
