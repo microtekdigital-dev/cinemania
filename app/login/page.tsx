@@ -1,13 +1,10 @@
 'use client';
-import { useState, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase-browser';
 
-function LoginForm() {
-  const searchParams = useSearchParams();
-  const [mode, setMode] = useState<'login' | 'register'>(
-    searchParams.get('mode') === 'register' ? 'register' : 'login'
-  );
+export default function LoginPage() {
+  const [mode, setMode] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -15,6 +12,13 @@ function LoginForm() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('mode') === 'register') setMode('register');
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,22 +79,5 @@ function LoginForm() {
         </div>
       </div>
     </main>
-  );
-}
-
-export default function LoginPage() {
-  return (
-    <Suspense fallback={
-      <main className="min-h-screen bg-gray-950 flex items-center justify-center px-4">
-        <div className="w-full max-w-sm text-center">
-          <span className="text-5xl tracking-wider" style={{ fontFamily: 'var(--font-bebas), sans-serif' }}>
-            <span className="text-white">CINE</span><span className="text-blue-500">MANÍA</span>
-          </span>
-          <p className="text-gray-400 mt-8">Cargando...</p>
-        </div>
-      </main>
-    }>
-      <LoginForm />
-    </Suspense>
   );
 }
