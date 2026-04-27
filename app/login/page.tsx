@@ -80,7 +80,16 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-950" />}>
+    <Suspense fallback={
+      <main className="min-h-screen bg-gray-950 flex items-center justify-center px-4">
+        <div className="w-full max-w-sm text-center">
+          <span className="text-5xl tracking-wider" style={{ fontFamily: 'var(--font-bebas), sans-serif' }}>
+            <span className="text-white">CINE</span><span className="text-blue-500">MANÍA</span>
+          </span>
+          <p className="text-gray-400 mt-8">Cargando...</p>
+        </div>
+      </main>
+    }>
       <LoginForm />
     </Suspense>
   );
