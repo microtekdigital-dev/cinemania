@@ -4,6 +4,7 @@ import MovieGrid from '@/components/MovieGrid';
 import SearchBar from '@/components/SearchBar';
 import Footer from '@/components/Footer';
 import UserMenu from '@/components/UserMenu';
+import Logo from '@/components/Logo';
 import { createClient } from '@/lib/supabase-server';
 import { getMoviesForHome, getMoviesForSearch, getAllGenres, getAllYears, getWatchHistory, type SearchMovie, type HomeMovies } from '@/lib/movie-repository';
 
@@ -40,7 +41,7 @@ export default async function Home() {
     <main className="min-h-screen bg-gray-950 text-white">
       <header className="fixed top-0 w-full z-[100] bg-gray-950/95 backdrop-blur-sm px-3 py-2">
         <div className="flex items-center gap-2">
-          <a href="/" className="shrink-0"><img src="/cinemania.png" alt="Cinemanía" className="h-10" /></a>
+          <Logo />
           <div className="flex-1 min-w-0">
             <SearchBar movies={searchMovies} />
           </div>

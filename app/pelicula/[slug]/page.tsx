@@ -6,6 +6,7 @@ import FavoriteButton from '@/components/FavoriteButton';
 import WatchTracker from '@/components/WatchTracker';
 import ReviewSection from '@/components/ReviewSection';
 import MovieRow from '@/components/MovieRow';
+import Logo from '@/components/Logo';
 import { getMovieBySlug, getMovies, getMoviesForSearch, getRelatedMovies } from '@/lib/movie-repository';
 import { notFound } from 'next/navigation';
 
@@ -35,9 +36,7 @@ export default async function MoviePage({ params }: { params: Promise<{ slug: st
     <main className="min-h-screen bg-gray-950 text-white">
       {/* Header */}
       <header className="fixed top-0 w-full z-50 bg-gray-950/80 backdrop-blur-sm px-3 py-2 flex items-center gap-2">
-        <a href="/" className="shrink-0">
-          <img src="/cinemania.png" alt="Cinemanía" className="h-10" />
-        </a>
+        <Logo />
         <div className="flex-1 min-w-0">
           <SearchBar movies={searchMovies as any} />
         </div>
