@@ -34,6 +34,8 @@ export default function HeroMovie({ movies }: { movies: Movie[] }) {
     return () => clearInterval(interval);
   }, [movies.length]);
 
+  if (!movie) return null;
+
   const goTo = (i: number) => {
     setFade(false);
     setTimeout(() => { setIndex(i); setShowTrailer(false); setFade(true); }, 400);

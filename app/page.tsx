@@ -31,9 +31,10 @@ export default async function Home() {
     searchMovies = [];
   }
 
-  const featured = homeData.trending
-    .filter(m => m.backdrop && m.trailer)
-    .slice(0, 6);
+  const featured = [
+    ...homeData.trending.filter(m => m.backdrop && m.trailer),
+    ...homeData.trending.filter(m => m.backdrop && !m.trailer),
+  ].slice(0, 6);
 
   return (
     <main className="min-h-screen bg-gray-950 text-white">
