@@ -26,9 +26,13 @@ export default function LoginPage() {
     setError('');
     setMessage('');
     if (mode === 'login') {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) setError('Email o contraseña incorrectos');
-      else { router.push('/'); router.refresh(); }
+      const { error, data } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        setError('Email o contraseña incorrectos');
+      } else if (data.session) {
+        setMessage('¡Ingresando...');
+        setTimeout(() => { window.location.replace('/'); }, 1000);
+      }
     } else {
       const { error } = await supabase.auth.signUp({ email, password });
       if (error) setError(error.message);
