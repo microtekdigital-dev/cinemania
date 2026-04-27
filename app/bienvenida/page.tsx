@@ -50,9 +50,9 @@ export default function BienvenidaPage() {
   return (
     <main className="min-h-screen bg-gray-950 text-white flex flex-col items-center justify-center px-4 relative overflow-hidden">
       {/* Fondo degradado */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-950/40 via-gray-950 to-gray-950 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-950/40 via-gray-950 to-gray-950" style={{ pointerEvents: 'none', zIndex: 0 }} />
 
-      <div className="relative z-10 flex flex-col items-center text-center max-w-lg">
+      <div className="relative flex flex-col items-center text-center max-w-lg" style={{ zIndex: 1 }}>
         <div className="mb-6 flex justify-center">
           <span className="text-5xl tracking-wider" style={{ fontFamily: 'var(--font-bebas), sans-serif' }}>
             <span className="text-white">CINE</span><span className="text-blue-500">MANÍA</span>
@@ -64,17 +64,19 @@ export default function BienvenidaPage() {
         <div className="flex gap-4">
           <button
             onClick={() => openMode('register')}
-            onKeyDown={e => e.key === 'Enter' && openMode('register')}
+            onPointerDown={() => openMode('register')}
             tabIndex={0}
-            className="bg-blue-600 hover:bg-blue-700 focus:bg-blue-700 text-white font-bold px-8 py-4 rounded-xl transition text-base outline-none focus:ring-4 focus:ring-blue-400"
+            style={{ cursor: 'pointer', zIndex: 10, position: 'relative' }}
+            className="bg-blue-600 text-white font-bold px-8 py-4 rounded-xl text-base outline-none focus:ring-4 focus:ring-blue-400"
           >
             Crear cuenta
           </button>
           <button
             onClick={() => openMode('login')}
-            onKeyDown={e => e.key === 'Enter' && openMode('login')}
+            onPointerDown={() => openMode('login')}
             tabIndex={0}
-            className="bg-gray-800 hover:bg-gray-700 focus:bg-gray-700 text-white font-semibold px-8 py-4 rounded-xl transition text-base outline-none focus:ring-4 focus:ring-blue-400"
+            style={{ cursor: 'pointer', zIndex: 10, position: 'relative' }}
+            className="bg-gray-800 text-white font-semibold px-8 py-4 rounded-xl text-base outline-none focus:ring-4 focus:ring-blue-400"
           >
             Ingresar
           </button>
