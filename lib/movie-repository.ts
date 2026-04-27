@@ -240,17 +240,20 @@ export async function getMoviesForHome(): Promise<HomeMovies> {
 export async function getMoviesForSearch(): Promise<SearchMovie[]> {
   try {
     const supabase = createServerClient();
-    const { data, error } = await supabase
-      .from('movies')
-      .select('slug,title,year,poster,rating')
-      .limit(15000);
-
-    if (error) {
-      console.error('getMoviesForSearch error:', error);
-      return [];
+    const all: SearchMovie[] = [];
+    let from = 0;
+    const pageSize = 1000;
+    while (true) {
+      const { data, error } = await supabase
+        .from('movies')
+        .select('slug,title,year,poster,rating')
+        .range(from, from + pageSize - 1);
+      if (error || !data || data.length === 0) break;
+      all.push(...(data as SearchMovie[]));
+      from += pageSize;
+      if (data.length < pageSize) break;
     }
-
-    return (data ?? []) as SearchMovie[];
+    return all;
   } catch (err) {
     console.error('getMoviesForSearch unexpected error:', err);
     return [];
