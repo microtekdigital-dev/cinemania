@@ -3,7 +3,8 @@ import SearchBar from '@/components/SearchBar';
 import Footer from '@/components/Footer';
 import UserMenu from '@/components/UserMenu';
 import FavoriteButton from '@/components/FavoriteButton';
-import { getMovieBySlug, getMovies, getMoviesForSearch } from '@/lib/movie-repository';
+import MovieRow from '@/components/MovieRow';
+import { getMovieBySlug, getMovies, getMoviesForSearch, getRelatedMovies } from '@/lib/movie-repository';
 import { notFound } from 'next/navigation';
 
 export async function generateStaticParams() {
@@ -25,6 +26,8 @@ export default async function MoviePage({ params }: { params: Promise<{ slug: st
   ]);
 
   if (!movie) notFound();
+
+  const related = await getRelatedMovies(slug, movie.genre ?? []);
 
   return (
     <main className="min-h-screen bg-gray-950 text-white">
@@ -112,6 +115,13 @@ export default async function MoviePage({ params }: { params: Promise<{ slug: st
             <p className="text-gray-300 text-sm leading-relaxed">{movie.overview}</p>
           </div>
         </div>
+
+        {/* Relacionadas */}
+        {related.length > 0 && (
+          <div className="mt-10">
+            <MovieRow title="También te puede gustar" movies={related} />
+          </div>
+        )}
       </div>
       <Footer />
     </main>

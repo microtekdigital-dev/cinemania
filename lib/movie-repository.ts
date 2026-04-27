@@ -256,3 +256,20 @@ export async function getMoviesForSearch(): Promise<SearchMovie[]> {
     return [];
   }
 }
+
+export async function getRelatedMovies(slug: string, genres: string[], limit = 12): Promise<HomeMovie[]> {
+  try {
+    const supabase = createServerClient();
+    if (!genres.length) return [];
+    const { data } = await supabase
+      .from('movies')
+      .select(HOME_SELECT)
+      .overlaps('genre', genres)
+      .neq('slug', slug)
+      .order('rating', { ascending: false })
+      .limit(limit);
+    return (data ?? []) as HomeMovie[];
+  } catch {
+    return [];
+  }
+}

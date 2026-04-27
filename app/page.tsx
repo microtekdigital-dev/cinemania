@@ -38,7 +38,7 @@ export default async function Home() {
           <UserMenu />
         </div>
       </header>
-      <div className="pt-16">
+      <div className="pt-14">
         <HeroMovie movie={featured} />
       </div>
       <div className="px-4 py-6 space-y-2">

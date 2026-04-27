@@ -97,6 +97,12 @@ export default function MovieGrid({ genres, years }: MovieGridProps) {
         {movies.map((movie, i) => (
           <MovieCard key={`${movie.slug}-${i}`} movie={movie} />
         ))}
+        {loading && movies.length === 0 && Array.from({ length: 20 }).map((_, i) => (
+          <div key={i} className="animate-pulse">
+            <div className="aspect-[2/3] rounded-lg bg-gray-800" />
+            <div className="h-2.5 bg-gray-800 rounded mt-2 w-3/4" />
+          </div>
+        ))}
       </div>
 
       {hasMore && (
