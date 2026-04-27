@@ -42,7 +42,11 @@ export default function LoginPage() {
   return (
     <main className="min-h-screen bg-gray-950 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
-        <img src="/cinemania.png" alt="Cinemanía" className="h-24 mx-auto mb-8 object-contain" />
+        <div className="flex justify-center mb-8">
+          <span className="text-5xl tracking-wider" style={{ fontFamily: 'var(--font-bebas), sans-serif' }}>
+            <span className="text-white">CINE</span><span className="text-blue-500">MANÍA</span>
+          </span>
+        </div>
         <div className="bg-gray-900 rounded-2xl p-8">
           <h2 className="text-xl font-bold mb-6">
             {mode === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta'}

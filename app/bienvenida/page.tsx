@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase-browser';
+import Logo from '@/components/Logo';
 
 export default function BienvenidaPage() {
   const [mode, setMode] = useState<'login' | 'register' | null>(null);
@@ -52,7 +53,11 @@ export default function BienvenidaPage() {
       <div className="absolute inset-0 bg-gradient-to-br from-blue-950/40 via-gray-950 to-gray-950 pointer-events-none" />
 
       <div className="relative z-10 flex flex-col items-center text-center max-w-lg">
-        <img src="/cinemania.png" alt="Cinemanía" className="h-32 object-contain mb-6" />
+        <div className="mb-6 flex justify-center">
+          <span className="text-5xl tracking-wider" style={{ fontFamily: 'var(--font-bebas), sans-serif' }}>
+            <span className="text-white">CINE</span><span className="text-blue-500">MANÍA</span>
+          </span>
+        </div>
         <p className="text-gray-400 text-lg mb-10">
           Tu plataforma de películas. Regístrate gratis para acceder al catálogo completo.
         </p>
@@ -82,7 +87,11 @@ export default function BienvenidaPage() {
             >
               ✕
             </button>
-            <img src="/cinemania.png" alt="Cinemanía" className="h-14 mx-auto mb-6 object-contain" />
+            <div className="flex justify-center mb-6">
+              <span className="text-4xl tracking-wider" style={{ fontFamily: 'var(--font-bebas), sans-serif' }}>
+                <span className="text-white">CINE</span><span className="text-blue-500">MANÍA</span>
+              </span>
+            </div>
             <h2 className="text-xl font-bold mb-6 text-center">
               {mode === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta'}
             </h2>
