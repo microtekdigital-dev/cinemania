@@ -20,7 +20,7 @@ export default async function MiListaPage() {
   return (
     <main className="min-h-screen bg-gray-950 text-white">
       <header className="fixed top-0 w-full z-50 bg-gray-950/80 backdrop-blur-sm px-3 py-2 flex items-center justify-between">
-        <a href="/"><img src="/cinemania.png" alt="Cinemanía" className="h-10 sm:h-36" /></a>
+        <a href="/"><img src="/cinemania.png" alt="Cinemanía" className="h-10" /></a>
         <UserMenu />
       </header>
 

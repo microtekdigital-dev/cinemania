@@ -40,7 +40,7 @@ export default async function Home() {
     <main className="min-h-screen bg-gray-950 text-white">
       <header className="fixed top-0 w-full z-50 bg-gray-950/80 backdrop-blur-sm px-3 py-2">
         <div className="flex items-center gap-2">
-          <a href="/" className="shrink-0"><img src="/cinemania.png" alt="Cinemanía" className="h-10 sm:h-36" /></a>
+          <a href="/" className="shrink-0"><img src="/cinemania.png" alt="Cinemanía" className="h-10" /></a>
           <div className="flex-1 min-w-0">
             <SearchBar movies={searchMovies} />
           </div>
