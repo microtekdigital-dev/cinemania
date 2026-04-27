@@ -267,8 +267,15 @@ export async function getRelatedMovies(slug: string, genres: string[], limit = 1
       .overlaps('genre', genres)
       .neq('slug', slug)
       .order('rating', { ascending: false })
-      .limit(limit);
-    return (data ?? []) as HomeMovie[];
+      .limit(limit * 3); // traer más para deduplicar
+    // deduplicar por slug
+    const seen = new Set<string>();
+    const unique = (data ?? []).filter((m: any) => {
+      if (seen.has(m.slug)) return false;
+      seen.add(m.slug);
+      return true;
+    });
+    return unique.slice(0, limit) as HomeMovie[];
   } catch {
     return [];
   }
