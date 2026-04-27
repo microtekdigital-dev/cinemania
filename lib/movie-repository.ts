@@ -260,37 +260,37 @@ export async function getMoviesForSearch(): Promise<SearchMovie[]> {
 export async function getRelatedMovies(slug: string, genres: string[], title: string, limit = 12): Promise<HomeMovie[]> {
   try {
     const supabase = createServerClient();
+    if (!genres.length) return [];
 
-    // Extraer palabras clave del título (ignorar palabras cortas)
+    // Extraer primera palabra clave del título (>4 chars)
     const titleWords = title
       .toLowerCase()
-      .replace(/[^a-záéíóúüñ\s]/gi, '')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
       .split(/\s+/)
-      .filter(w => w.length > 3);
+      .filter(w => w.length > 4);
 
-    // Buscar por título similar (misma saga) y por género en paralelo
     const [sagaResult, genreResult] = await Promise.all([
+      // Saga: mismo título Y mismo género (ambas condiciones)
       titleWords.length > 0
         ? supabase
             .from('movies')
             .select(HOME_SELECT)
             .ilike('title', `%${titleWords[0]}%`)
+            .overlaps('genre', genres)  // debe compartir género
             .neq('slug', slug)
             .order('rating', { ascending: false })
             .limit(limit)
         : Promise.resolve({ data: [] }),
-      genres.length > 0
-        ? supabase
-            .from('movies')
-            .select(HOME_SELECT)
-            .overlaps('genre', genres)
-            .neq('slug', slug)
-            .order('rating', { ascending: false })
-            .limit(limit * 2)
-        : Promise.resolve({ data: [] }),
+      // Género: mismo género, ordenado por rating
+      supabase
+        .from('movies')
+        .select(HOME_SELECT)
+        .contains('genre', [genres[0]])  // debe tener el género principal
+        .neq('slug', slug)
+        .order('rating', { ascending: false })
+        .limit(limit * 2),
     ]);
 
-    // Combinar: primero saga, luego por género, deduplicar
     const combined = [
       ...((sagaResult as any).data ?? []),
       ...((genreResult as any).data ?? []),
