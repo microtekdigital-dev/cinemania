@@ -44,7 +44,9 @@ export default function SeriePlayer({ tmdbId, totalSeasons, embeds = [], serieSl
 
   // Detectar si hay cuevana_slug guardado en los embeds
   const hasCuevana = embeds.some(e => isCuevanaEmbed(e.url));
-  const cuevanaSlug = serieSlug || (hasCuevana ? embeds.find(e => isCuevanaEmbed(e.url))?.url?.match(/cuevana3\.st\/serie\/([^/]+)/)?.[1] : null);
+  const rawCuevanaSlug = serieSlug || (hasCuevana ? embeds.find(e => isCuevanaEmbed(e.url))?.url?.match(/cuevana3\.st\/serie\/([^/]+)/)?.[1] : null);
+  // Quitar el año del slug para cuevana3 (breaking-bad-2008 → breaking-bad)
+  const cuevanaSlug = rawCuevanaSlug?.replace(/-\d{4}$/, '') || null;
 
   // Cargar embeds de cuevana cuando cambia episodio
   const loadCuevanaEmbeds = useCallback(async (s: number, e: number) => {
