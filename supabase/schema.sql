@@ -78,3 +78,24 @@ CREATE TABLE IF NOT EXISTS public.reviews (
 ALTER TABLE public.reviews ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Reviews are public" ON public.reviews FOR SELECT USING (true);
 CREATE POLICY "Users can manage own reviews" ON public.reviews FOR ALL USING (auth.uid() = user_id);
+
+-- Tabla de series
+CREATE TABLE IF NOT EXISTS public.series (
+  slug            text PRIMARY KEY,
+  title           text NOT NULL,
+  original_title  text,
+  year            text,
+  poster          text,
+  backdrop        text,
+  overview        text,
+  rating          numeric(3,1),
+  genre           text[]   DEFAULT '{}',
+  trailer         text,
+  tmdb_id         integer,
+  seasons         integer  DEFAULT 1,
+  status          text     -- 'Ended', 'Returning Series', etc.
+);
+
+CREATE INDEX IF NOT EXISTS idx_series_rating ON public.series (rating DESC);
+CREATE INDEX IF NOT EXISTS idx_series_genre  ON public.series USING gin (genre);
+CREATE INDEX IF NOT EXISTS idx_series_title  ON public.series USING gin (to_tsvector('spanish', title));

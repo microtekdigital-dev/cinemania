@@ -5,8 +5,10 @@ import SearchBar from '@/components/SearchBar';
 import Footer from '@/components/Footer';
 import UserMenu from '@/components/UserMenu';
 import Logo from '@/components/Logo';
+import SerieRow from '@/components/SerieRow';
 import { createClient } from '@/lib/supabase-server';
 import { getMoviesForHome, getMoviesForSearch, getAllGenres, getAllYears, getWatchHistory, type SearchMovie, type HomeMovies } from '@/lib/movie-repository';
+import { getSeriesForHome } from '@/lib/series-repository';
 
 export default async function Home() {
   let homeData: HomeMovies = { trending: [], topRated: [], recent: [], action: [], drama: [] };
@@ -14,6 +16,7 @@ export default async function Home() {
   let genres: string[] = [];
   let years: string[] = [];
   let continueWatching: any[] = [];
+  let topSeries: any[] = [];
 
   try {
     const supabase = await createClient();
@@ -25,8 +28,9 @@ export default async function Home() {
       getAllGenres(),
       getAllYears(),
       user ? getWatchHistory(user.id) : Promise.resolve([]),
+      getSeriesForHome(20),
     ]);
-    [homeData, searchMovies, genres, years, continueWatching] = results;
+    [homeData, searchMovies, genres, years, continueWatching, topSeries] = results;
   } catch {
     homeData = { trending: [], topRated: [], recent: [], action: [], drama: [] };
     searchMovies = [];
@@ -54,6 +58,9 @@ export default async function Home() {
       <div className="px-4 py-6 space-y-2">
         {continueWatching.length > 0 && (
           <MovieRow title="▶ Continuar viendo" movies={continueWatching} />
+        )}
+        {topSeries.length > 0 && (
+          <SerieRow title="📺 Series populares" series={topSeries} />
         )}
         <MovieRow title="🔥 Tendencias" movies={homeData.trending} />
         <MovieRow title="⭐ Aclamadas por la crítica" movies={homeData.topRated} />
