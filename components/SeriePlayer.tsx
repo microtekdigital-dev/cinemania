@@ -38,13 +38,8 @@ export default function SeriePlayer({ tmdbId, totalSeasons, embeds = [] }: Serie
     !e.url?.includes('vidlink') && !e.url?.includes('vidsrc')
   );
 
-  // Combinar: base + luvana (deduplicar por server name)
-  const allServers = [...baseServers];
-  for (const e of luvanaEmbeds) {
-    if (!allServers.some(s => s.server === e.server)) {
-      allServers.push(e);
-    }
-  }
+  // Combinar: base + todos los embeds de luvana (cada uno es un servidor distinto)
+  const allServers = [...baseServers, ...luvanaEmbeds];
 
   const [selectedIdx, setSelectedIdx] = useState(0);
 
@@ -74,17 +69,24 @@ export default function SeriePlayer({ tmdbId, totalSeasons, embeds = [] }: Serie
 
       {/* Botones de servidor */}
       <div className="flex flex-wrap gap-2 mb-3">
-        {allServers.map((s, idx) => (
-          <button key={idx} onClick={() => setSelectedIdx(idx)}
-            className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
-              selectedIdx === idx ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-            }`}>
-            {s.server}
-            {s.lang && s.lang !== 'Multilenguaje' && (
-              <span className="ml-1 text-xs opacity-70">({s.lang})</span>
-            )}
-          </button>
-        ))}
+        {allServers.map((s, idx) => {
+          // Para embeds con server "Online", mostrar el dominio como nombre
+          let label = s.server;
+          if (s.server === 'Online') {
+            try { label = new URL(s.url).hostname.replace('www.', '').split('.')[0]; } catch {}
+          }
+          return (
+            <button key={idx} onClick={() => setSelectedIdx(idx)}
+              className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
+                selectedIdx === idx ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}>
+              {label}
+              {s.lang && s.lang !== 'Multilenguaje' && (
+                <span className="ml-1 text-xs opacity-70">({s.lang})</span>
+              )}
+            </button>
+          );
+        })}
       </div>
 
       {/* Player */}
