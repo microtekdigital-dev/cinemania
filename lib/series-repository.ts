@@ -15,6 +15,7 @@ export interface Serie {
   tmdb_id: number | null;
   seasons: number;
   status: string | null;
+  embeds: Array<{ url: string; server: string; lang?: string; quality?: string }>;
 }
 
 export async function getSerieBySlug(slug: string): Promise<Serie | null> {
