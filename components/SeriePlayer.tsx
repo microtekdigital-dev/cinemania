@@ -14,12 +14,16 @@ interface SeriePlayerProps {
   embeds?: Embed[];
 }
 
-// Reemplaza temporada/episodio en URLs de luvana que los tengan hardcodeados
+// Reemplaza temporada/episodio en URLs que los tengan hardcodeados
 function buildEpisodeUrl(url: string, season: number, episode: number): string {
-  // vidlink: /tv/{id}/1/1 → /tv/{id}/{s}/{e}
+  // vidlink: /tv/{id}/1/1
   url = url.replace(/(\/tv\/\d+\/)(\d+)\/(\d+)/, `$1${season}/${episode}`);
-  // vidsrc: /embed/tv/{id}/1/1 → /embed/tv/{id}/{s}/{e}
+  // vidsrc.to: /embed/tv/{id}/1/1
   url = url.replace(/(\/embed\/tv\/\d+\/)(\d+)\/(\d+)/, `$1${season}/${episode}`);
+  // vidsrc.me: ?season=1&episode=1
+  url = url.replace(/season=\d+/, `season=${season}`).replace(/episode=\d+/, `episode=${episode}`);
+  // videasy: /tv/{id}/1/1
+  url = url.replace(/(\/tv\/\d+\/)(\d+)\/(\d+)/, `$1${season}/${episode}`);
   return url;
 }
 
