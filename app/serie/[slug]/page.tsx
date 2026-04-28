@@ -51,7 +51,7 @@ export default async function SeriePage({ params }: { params: Promise<{ slug: st
       {/* Player */}
       <div className="px-4 sm:px-8 py-6 max-w-4xl mx-auto">
         {serie.tmdb_id && (
-          <SeriePlayer tmdbId={serie.tmdb_id} totalSeasons={serie.seasons} embeds={serie.embeds} />
+          <SeriePlayer tmdbId={serie.tmdb_id} totalSeasons={serie.seasons} embeds={serie.embeds} serieSlug={serie.slug} />
         )}
 
         {/* Trailer */}
