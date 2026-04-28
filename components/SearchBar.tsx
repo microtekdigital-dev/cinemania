@@ -1,20 +1,28 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 
-interface Movie {
+interface Item {
   slug: string;
   title: string;
   original_title?: string | null;
   year: string | null;
   poster: string | null;
   rating: number | null;
+  type: 'movie' | 'serie';
 }
 
-export default function SearchBar({ movies }: { movies: Movie[] }) {
+interface Props {
+  movies: Omit<Item, 'type'>[];
+  series?: Omit<Item, 'type'>[];
+}
+
+export default function SearchBar({ movies, series = [] }: Props) {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<Movie[]>([]);
+  const [results, setResults] = useState<Item[]>([]);
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const moviesRef = useRef(movies);
+  const seriesRef = useRef(series);
 
   useEffect(() => {
     if (query.trim().length < 2) {
@@ -23,14 +31,19 @@ export default function SearchBar({ movies }: { movies: Movie[] }) {
       return;
     }
     const q = query.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    const found = movies
-      .filter(m => {
-        const title = m.title.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-        const orig = (m.original_title || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-        return title.includes(q) || orig.includes(q);
-      })
-      .slice(0, 8);
-    setResults(found);
+    const normalize = (s: string) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+    const movieResults: Item[] = moviesRef.current
+      .filter(m => normalize(m.title).includes(q) || normalize(m.original_title || '').includes(q))
+      .slice(0, 5)
+      .map(m => ({ ...m, type: 'movie' as const }));
+
+    const serieResults: Item[] = seriesRef.current
+      .filter(s => normalize(s.title).includes(q) || normalize(s.original_title || '').includes(q))
+      .slice(0, 3)
+      .map(s => ({ ...s, type: 'serie' as const }));
+
+    setResults([...movieResults, ...serieResults].slice(0, 8));
     setOpen(true);
   }, [query]);
 
@@ -52,33 +65,34 @@ export default function SearchBar({ movies }: { movies: Movie[] }) {
           type="text"
           value={query}
           onChange={e => setQuery(e.target.value)}
-          placeholder="Buscar películas..."
+          placeholder="Buscar películas y series..."
           className="bg-transparent text-white text-sm outline-none w-full placeholder-gray-500"
         />
         {query && (
-          <button onClick={() => { setQuery(''); setOpen(false); }} className="text-gray-400 hover:text-white">
-            ✕
-          </button>
+          <button onClick={() => { setQuery(''); setOpen(false); }} className="text-gray-400 hover:text-white">✕</button>
         )}
       </div>
 
       {open && results.length > 0 && (
         <div className="absolute top-full mt-2 w-full bg-gray-900 border border-gray-700 rounded-xl shadow-2xl overflow-hidden z-50">
-          {results.map(m => (
+          {results.map(item => (
             <a
-              key={m.slug}
-              href={`/pelicula/${m.slug}`}
+              key={`${item.type}-${item.slug}`}
+              href={item.type === 'movie' ? `/pelicula/${item.slug}` : `/serie/${item.slug}`}
               className="flex items-center gap-3 px-4 py-3 hover:bg-gray-800 transition"
               onClick={() => setOpen(false)}
             >
-              {m.poster
-                ? <img src={m.poster} alt={m.title} className="w-9 h-12 object-cover rounded shrink-0" />
+              {item.poster
+                ? <img src={item.poster} alt={item.title} className="w-9 h-12 object-cover rounded shrink-0" />
                 : <div className="w-9 h-12 bg-gray-700 rounded shrink-0" />
               }
-              <div className="min-w-0">
-                <p className="text-sm font-semibold text-white truncate">{m.title}</p>
-                <p className="text-xs text-gray-400">{m.year} {m.rating && `· ⭐ ${m.rating}`}</p>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-semibold text-white truncate">{item.title}</p>
+                <p className="text-xs text-gray-400">{item.year} {item.rating && `· ⭐ ${item.rating}`}</p>
               </div>
+              <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 ${item.type === 'serie' ? 'bg-blue-600/80 text-white' : 'bg-gray-700 text-gray-300'}`}>
+                {item.type === 'serie' ? 'SERIE' : 'PELÍCULA'}
+              </span>
             </a>
           ))}
         </div>

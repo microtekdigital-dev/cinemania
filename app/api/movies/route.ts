@@ -7,6 +7,7 @@ export async function GET(req: NextRequest) {
   const search = searchParams.get('search') ?? undefined;
   const genre = searchParams.get('genre') ?? undefined;
   const year = searchParams.get('year') ?? undefined;
+  const country = searchParams.get('country') ?? undefined;
   const pageParam = searchParams.get('page');
 
   // Validar que page sea un entero positivo si se proporciona
@@ -19,6 +20,6 @@ export async function GET(req: NextRequest) {
     page = parsed;
   }
 
-  const result = await getMovies({ search, genre, year, page });
+  const result = await getMovies({ search, genre, year, country, page });
   return NextResponse.json(result);
 }

@@ -10,6 +10,7 @@ export interface Serie {
   overview: string | null;
   rating: number | null;
   genre: string[];
+  country: string[];
   trailer: string | null;
   tmdb_id: number | null;
   seasons: number;
@@ -64,5 +65,28 @@ export async function getAllSeriesForSearch(): Promise<Pick<Serie, 'slug'|'title
       if (data.length < 1000) break;
     }
     return all;
+  } catch { return []; }
+}
+
+export async function getAllSeriesCountries(): Promise<string[]> {
+  try {
+    const supabase = createServerClient();
+    const { data } = await supabase.from('series').select('country').not('country', 'is', null);
+    const countries = new Set<string>();
+    data?.forEach(row => row.country?.forEach((c: string) => countries.add(c)));
+    return Array.from(countries).sort();
+  } catch { return []; }
+}
+
+export async function getSeriesByCountry(country: string, limit = 50): Promise<Serie[]> {
+  try {
+    const supabase = createServerClient();
+    const { data } = await supabase
+      .from('series')
+      .select('slug,title,original_title,year,poster,backdrop,rating,genre,trailer,tmdb_id,seasons,status,country')
+      .contains('country', [country])
+      .order('rating', { ascending: false })
+      .limit(limit);
+    return (data ?? []) as Serie[];
   } catch { return []; }
 }

@@ -25,6 +25,7 @@ export interface Movie {
   overview: string | null;
   rating: number | null;
   genre: string[];
+  country: string[];
   trailer: string | null;
   embeds: Embed[];
   downloads: Download[];
@@ -34,6 +35,7 @@ export interface MovieFilters {
   search?: string;
   genre?: string;
   year?: string;
+  country?: string;
   page?: number;
 }
 
@@ -123,6 +125,9 @@ export async function getMovies(filters?: MovieFilters): Promise<PaginatedMovies
     if (filters?.year) {
       query = query.eq('year', filters.year);
     }
+    if (filters?.country) {
+      query = query.contains('country', [filters.country]);
+    }
 
     const { data, error, count } = await query
       .order('rating', { ascending: false })
@@ -162,6 +167,16 @@ export async function getAllGenres(): Promise<string[]> {
     console.error('getAllGenres unexpected error:', err);
     return [];
   }
+}
+
+export async function getAllCountries(): Promise<string[]> {
+  try {
+    const supabase = createServerClient();
+    const { data } = await supabase.from('movies').select('country').not('country', 'is', null);
+    const countries = new Set<string>();
+    data?.forEach(row => row.country?.forEach((c: string) => countries.add(c)));
+    return Array.from(countries).sort();
+  } catch { return []; }
 }
 
 export async function getAllYears(): Promise<string[]> {

@@ -7,16 +7,18 @@ import UserMenu from '@/components/UserMenu';
 import Logo from '@/components/Logo';
 import SerieRow from '@/components/SerieRow';
 import { createClient } from '@/lib/supabase-server';
-import { getMoviesForHome, getMoviesForSearch, getAllGenres, getAllYears, getWatchHistory, type SearchMovie, type HomeMovies } from '@/lib/movie-repository';
-import { getSeriesForHome } from '@/lib/series-repository';
+import { getMoviesForHome, getMoviesForSearch, getAllGenres, getAllYears, getAllCountries, getWatchHistory, type SearchMovie, type HomeMovies } from '@/lib/movie-repository';
+import { getSeriesForHome, getAllSeriesForSearch } from '@/lib/series-repository';
 
 export default async function Home() {
   let homeData: HomeMovies = { trending: [], topRated: [], recent: [], action: [], drama: [] };
   let searchMovies: SearchMovie[] = [];
   let genres: string[] = [];
   let years: string[] = [];
+  let countries: string[] = [];
   let continueWatching: any[] = [];
   let topSeries: any[] = [];
+  let searchSeries: any[] = [];
 
   try {
     const supabase = await createClient();
@@ -27,13 +29,16 @@ export default async function Home() {
       getMoviesForSearch(),
       getAllGenres(),
       getAllYears(),
+      getAllCountries(),
       user ? getWatchHistory(user.id) : Promise.resolve([]),
       getSeriesForHome(20),
+      getAllSeriesForSearch(),
     ]);
-    [homeData, searchMovies, genres, years, continueWatching, topSeries] = results;
+    [homeData, searchMovies, genres, years, countries, continueWatching, topSeries, searchSeries] = results;
   } catch {
     homeData = { trending: [], topRated: [], recent: [], action: [], drama: [] };
     searchMovies = [];
+    searchSeries = [];
   }
 
   const featured = [
@@ -44,10 +49,14 @@ export default async function Home() {
   return (
     <main className="min-h-screen bg-gray-950 text-white">
       <header className="fixed top-0 w-full z-[100] bg-gray-950/95 backdrop-blur-sm px-3 py-2">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <Logo />
+          <nav className="hidden sm:flex items-center gap-1 shrink-0">
+            <a href="/" className="px-3 py-1.5 text-sm font-semibold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition">Películas</a>
+            <a href="/series" className="px-3 py-1.5 text-sm font-semibold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition">Series</a>
+          </nav>
           <div className="flex-1 min-w-0">
-            <SearchBar movies={searchMovies} />
+            <SearchBar movies={searchMovies} series={searchSeries} />
           </div>
           <UserMenu />
         </div>
@@ -69,7 +78,7 @@ export default async function Home() {
         <MovieRow title="🎭 Drama" movies={homeData.drama} />
         <div className="pt-4">
           <h2 className="text-lg font-bold mb-4">🎬 Todo el catálogo</h2>
-          <MovieGrid genres={genres} years={years} />
+          <MovieGrid genres={genres} years={years} countries={countries} />
         </div>
       </div>
       <Footer />

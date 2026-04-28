@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS public.movies (
   rating          numeric(3,1),
   genre           text[]   DEFAULT '{}',
   trailer         text,
+  country         text[]   DEFAULT '{}',
   embeds          jsonb    DEFAULT '[]',
   downloads       jsonb    DEFAULT '[]'
 );
@@ -93,9 +94,14 @@ CREATE TABLE IF NOT EXISTS public.series (
   trailer         text,
   tmdb_id         integer,
   seasons         integer  DEFAULT 1,
-  status          text     -- 'Ended', 'Returning Series', etc.
+  status          text,    -- 'Ended', 'Returning Series', etc.
+  embeds          jsonb    DEFAULT '[]'
 );
 
 CREATE INDEX IF NOT EXISTS idx_series_rating ON public.series (rating DESC);
 CREATE INDEX IF NOT EXISTS idx_series_genre  ON public.series USING gin (genre);
 CREATE INDEX IF NOT EXISTS idx_series_title  ON public.series USING gin (to_tsvector('spanish', title));
+
+-- RLS: series son públicas para lectura
+ALTER TABLE public.series ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Series are public" ON public.series FOR SELECT USING (true);
