@@ -2,12 +2,18 @@ import Footer from '@/components/Footer';
 import UserMenu from '@/components/UserMenu';
 import Logo from '@/components/Logo';
 import SeriePlayer from '@/components/SeriePlayer';
-import { getSerieBySlug } from '@/lib/series-repository';
+import SearchBar from '@/components/SearchBar';
+import { getSerieBySlug, getAllSeriesForSearch } from '@/lib/series-repository';
+import { getMoviesForSearch } from '@/lib/movie-repository';
 import { notFound } from 'next/navigation';
 
 export default async function SeriePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const serie = await getSerieBySlug(slug);
+  const [serie, searchMovies, searchSeries] = await Promise.all([
+    getSerieBySlug(slug),
+    getMoviesForSearch(),
+    getAllSeriesForSearch(),
+  ]);
   if (!serie) notFound();
 
   return (
@@ -18,7 +24,9 @@ export default async function SeriePage({ params }: { params: Promise<{ slug: st
           <a href="/" className="px-3 py-1.5 text-sm font-semibold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition">Películas</a>
           <a href="/series" className="px-3 py-1.5 text-sm font-semibold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition">Series</a>
         </nav>
-        <div className="flex-1" />
+        <div className="flex-1 min-w-0">
+          <SearchBar movies={searchMovies as any} series={searchSeries as any} />
+        </div>
         <UserMenu />
       </header>
 
