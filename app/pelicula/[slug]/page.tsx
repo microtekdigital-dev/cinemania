@@ -37,6 +37,10 @@ export default async function MoviePage({ params }: { params: Promise<{ slug: st
       {/* Header */}
       <header className="fixed top-0 w-full z-50 bg-gray-950/80 backdrop-blur-sm px-3 py-2 flex items-center gap-2">
         <Logo />
+        <nav className="hidden sm:flex items-center gap-1 ml-2">
+          <a href="/" className="px-3 py-1.5 text-sm font-semibold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition">Películas</a>
+          <a href="/series" className="px-3 py-1.5 text-sm font-semibold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition">Series</a>
+        </nav>
         <div className="flex-1 min-w-0">
           <SearchBar movies={searchMovies as any} />
         </div>
