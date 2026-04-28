@@ -32,6 +32,7 @@ export default function SeriePlayer({ tmdbId, totalSeasons, embeds = [], serieSl
   const [selectedIdx, setSelectedIdx] = useState(0);
   const [cuevanaEmbeds, setCuevanaEmbeds] = useState<Embed[]>([]);
   const [loadingCuevana, setLoadingCuevana] = useState(false);
+  const [episodeCount, setEpisodeCount] = useState(10);
 
   // Servidores base (VidLink, VidSrc, etc.)
   const baseServers: Embed[] = [
@@ -47,6 +48,15 @@ export default function SeriePlayer({ tmdbId, totalSeasons, embeds = [], serieSl
   const rawCuevanaSlug = serieSlug || (hasCuevana ? embeds.find(e => isCuevanaEmbed(e.url))?.url?.match(/cuevana3\.st\/serie\/([^/]+)/)?.[1] : null);
   // Quitar el año del slug para cuevana3 (breaking-bad-2008 → breaking-bad)
   const cuevanaSlug = rawCuevanaSlug?.replace(/-\d{4}$/, '') || null;
+
+  // Cargar conteo de episodios cuando cambia la temporada
+  useEffect(() => {
+    if (!tmdbId) return;
+    fetch(`/api/episodes?tmdbId=${tmdbId}&season=${season}`)
+      .then(r => r.json())
+      .then(d => setEpisodeCount(d.episode_count || 10))
+      .catch(() => setEpisodeCount(10));
+  }, [season, tmdbId]);
 
   // Cargar embeds de cuevana cuando cambia episodio
   const loadCuevanaEmbeds = useCallback(async (s: number, e: number) => {
@@ -93,7 +103,7 @@ export default function SeriePlayer({ tmdbId, totalSeasons, embeds = [], serieSl
         </select>
         <select value={episode} onChange={e => { setEpisode(Number(e.target.value)); setSelectedIdx(0); }}
           className="bg-gray-800 text-white px-4 py-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500">
-          {Array.from({ length: 30 }, (_, i) => (
+          {Array.from({ length: episodeCount }, (_, i) => (
             <option key={i + 1} value={i + 1}>Episodio {i + 1}</option>
           ))}
         </select>
