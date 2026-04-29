@@ -1,7 +1,5 @@
 import Footer from '@/components/Footer';
-import UserMenu from '@/components/UserMenu';
-import Logo from '@/components/Logo';
-import SearchBar from '@/components/SearchBar';
+import AppHeader from '@/components/AppHeader';
 import SerieRow from '@/components/SerieRow';
 import SeriesGrid from '@/components/SeriesGrid';
 import { getSeriesForHome, getAllSeriesForSearch, getAllSeriesCountries } from '@/lib/series-repository';
@@ -31,20 +29,8 @@ export default async function SeriesPage() {
     .slice(0, 6);
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
-      <header className="fixed top-0 w-full z-[100] bg-gray-950/95 backdrop-blur-sm px-3 py-2">
-        <div className="flex items-center gap-3">
-          <Logo />
-          <nav className="hidden sm:flex items-center gap-1 shrink-0">
-            <a href="/" className="px-3 py-1.5 text-sm font-semibold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition">Películas</a>
-            <a href="/series" className="px-3 py-1.5 text-sm font-semibold text-white bg-white/10 rounded-lg transition">Series</a>
-          </nav>
-          <div className="flex-1 min-w-0">
-            <SearchBar movies={searchMovies} series={searchSeries} />
-          </div>
-          <UserMenu />
-        </div>
-      </header>
+    <main className="min-h-screen bg-[#030712] text-white">
+      <AppHeader movies={searchMovies} series={searchSeries} activePage="series" />
 
       <div className="pt-16 px-4 py-6 space-y-2">
         <h1 className="text-2xl font-black mb-4">📺 Series</h1>
