@@ -21,8 +21,9 @@ export async function generateStaticParams() {
   }
 }
 
-export default async function MoviePage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function MoviePage({ params, searchParams }: { params: Promise<{ slug: string }>, searchParams: Promise<{ server?: string }> }) {
   const { slug } = await params;
+  const { server: serverParam } = await searchParams;
   const [movie, searchMovies] = await Promise.all([
     getMovieBySlug(slug),
     getMoviesForSearch(),
@@ -31,6 +32,9 @@ export default async function MoviePage({ params }: { params: Promise<{ slug: st
   if (!movie) notFound();
 
   const related = await getRelatedMovies(slug, movie.genre ?? [], movie.title);
+  const embeds = (movie.embeds as any[]) || [];
+  const currentServer = Math.min(parseInt(serverParam || '0'), Math.max(0, embeds.length - 1));
+  const currentEmbed = embeds[currentServer];
 
   return (
     <main className="min-h-screen bg-gray-950 text-white">
@@ -95,7 +99,45 @@ export default async function MoviePage({ params }: { params: Promise<{ slug: st
         {/* Player */}
         <div id="player" className="mb-8">
           <h2 className="text-lg font-bold mb-3">Ver Online</h2>
-          <Player embeds={movie.embeds as any} slug={movie.slug} />
+          {/* Botones de servidor — links para compatibilidad TV */}
+          {embeds.length > 1 && (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '16px', justifyContent: 'center' }}>
+              {embeds.map((e: any, i: number) => (
+                <a
+                  key={i}
+                  href={`/pelicula/${slug}?server=${i}#player`}
+                  tabIndex={0}
+                  style={{
+                    padding: '12px 20px',
+                    borderRadius: '8px',
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    textDecoration: 'none',
+                    display: 'inline-block',
+                    backgroundColor: currentServer === i ? '#2563eb' : '#374151',
+                    color: currentServer === i ? '#ffffff' : '#d1d5db',
+                    minWidth: '80px',
+                    textAlign: 'center',
+                  }}
+                >
+                  {e.server || e.lang || `Servidor ${i + 1}`}
+                </a>
+              ))}
+            </div>
+          )}
+          {/* Player iframe */}
+          {currentEmbed ? (
+            <div style={{ maxWidth: '960px', margin: '0 auto', position: 'relative', paddingBottom: '56.25%', backgroundColor: '#000', borderRadius: '8px', overflow: 'hidden' }}>
+              <iframe
+                src={currentEmbed.url}
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                allowFullScreen
+                allow="autoplay; fullscreen; encrypted-media"
+              />
+            </div>
+          ) : (
+            <div style={{ padding: '48px', textAlign: 'center', color: '#6b7280' }}>No hay links disponibles.</div>
+          )}
         </div>
 
         {/* Trailer */}
