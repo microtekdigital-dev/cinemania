@@ -63,26 +63,32 @@ export default function Sidebar({ activeCategory, onCategoryChange }: SidebarPro
             {section.title}
           </p>
           {section.items.map(item => (
-            <button
+            <a
               key={item.id}
-              onClick={() => onCategoryChange(item.id)}
+              href={`/?cat=${item.id}`}
+              data-cat={item.id}
+              tabIndex={0}
+              className="sidebar-item"
               style={{
-                display: 'block',
-                width: '100%',
-                textAlign: 'left',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
                 padding: '6px 12px',
                 borderRadius: '8px',
                 fontSize: '14px',
+                textDecoration: 'none',
                 color: activeCategory === item.id ? '#60a5fa' : '#d1d5db',
                 backgroundColor: activeCategory === item.id ? 'rgba(255,255,255,0.05)' : 'transparent',
-                fontWeight: activeCategory === item.id ? '600' : 'normal',
-                border: 'none',
-                cursor: 'pointer',
-                marginBottom: '2px',
+                fontWeight: activeCategory === item.id ? '600' : '400',
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                onCategoryChange(item.id);
               }}
             >
-              ◆ {item.label}
-            </button>
+              <span style={{ color: '#6b7280', fontSize: '10px' }}>◆</span>
+              {item.label}
+            </a>
           ))}
         </div>
       ))}
