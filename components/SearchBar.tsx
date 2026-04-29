@@ -56,9 +56,9 @@ export default function SearchBar({ movies, series = [] }: Props) {
   }, []);
 
   return (
-    <div ref={ref} className="relative w-full max-w-md">
+    <div ref={ref} className="relative w-full max-w-md" style={{ maxWidth: '400px' }}>
       <div className="flex items-center bg-gray-800/80 border border-gray-700 rounded-full px-4 py-2 gap-2 focus-within:border-blue-500 transition">
-        <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-4 h-4 text-gray-400 shrink-0" style={{ width: '16px', height: '16px', minWidth: '16px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
         </svg>
         <input
