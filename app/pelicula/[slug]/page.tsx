@@ -99,13 +99,14 @@ export default async function MoviePage({ params, searchParams }: { params: Prom
         {/* Player */}
         <div id="player" className="mb-8">
           <h2 className="text-lg font-bold mb-3">Ver Online</h2>
-          {/* Botones de servidor — links para compatibilidad TV */}
+          {/* Botones de servidor */}
           {embeds.length > 1 && (
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '16px', justifyContent: 'center' }}>
+            <div id="server-buttons" style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '16px', justifyContent: 'center' }}>
               {embeds.map((e: any, i: number) => (
                 <a
                   key={i}
                   href={`/pelicula/${slug}?server=${i}#player`}
+                  id={`btn-${i}`}
                   tabIndex={0}
                   style={{
                     padding: '12px 20px',
@@ -129,6 +130,7 @@ export default async function MoviePage({ params, searchParams }: { params: Prom
           {currentEmbed ? (
             <div style={{ maxWidth: '960px', margin: '0 auto', position: 'relative', paddingBottom: '56.25%', backgroundColor: '#000', borderRadius: '8px', overflow: 'hidden' }}>
               <iframe
+                id="main-player"
                 src={currentEmbed.url}
                 style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
                 allowFullScreen
@@ -138,6 +140,24 @@ export default async function MoviePage({ params, searchParams }: { params: Prom
           ) : (
             <div style={{ padding: '48px', textAlign: 'center', color: '#6b7280' }}>No hay links disponibles.</div>
           )}
+          {/* Script para Samsung: cambiar servidor sin recargar */}
+          <script dangerouslySetInnerHTML={{ __html: `
+            (function() {
+              var embeds = ${JSON.stringify(embeds.map((e: any) => e.url))};
+              var btns = document.querySelectorAll('#server-buttons a');
+              btns.forEach(function(btn, i) {
+                btn.addEventListener('click', function(ev) {
+                  ev.preventDefault();
+                  var iframe = document.getElementById('main-player');
+                  if (iframe) iframe.src = embeds[i];
+                  btns.forEach(function(b, j) {
+                    b.style.backgroundColor = j === i ? '#2563eb' : '#374151';
+                    b.style.color = j === i ? '#ffffff' : '#d1d5db';
+                  });
+                });
+              });
+            })();
+          ` }} />
         </div>
 
         {/* Trailer */}
