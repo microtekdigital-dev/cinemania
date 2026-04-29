@@ -66,14 +66,22 @@ export default function Sidebar({ activeCategory, onCategoryChange }: SidebarPro
             <button
               key={item.id}
               onClick={() => onCategoryChange(item.id)}
-              className={`w-full text-left px-3 py-1.5 rounded-lg text-sm transition flex items-center gap-2 ${
-                activeCategory === item.id
-                  ? 'text-blue-400 bg-white/5 font-semibold'
-                  : 'text-gray-300 hover:text-white hover:bg-white/5'
-              }`}
+              style={{
+                display: 'block',
+                width: '100%',
+                textAlign: 'left',
+                padding: '6px 12px',
+                borderRadius: '8px',
+                fontSize: '14px',
+                color: activeCategory === item.id ? '#60a5fa' : '#d1d5db',
+                backgroundColor: activeCategory === item.id ? 'rgba(255,255,255,0.05)' : 'transparent',
+                fontWeight: activeCategory === item.id ? '600' : 'normal',
+                border: 'none',
+                cursor: 'pointer',
+                marginBottom: '2px',
+              }}
             >
-              <span className="text-gray-500">◆</span>
-              {item.label}
+              ◆ {item.label}
             </button>
           ))}
         </div>

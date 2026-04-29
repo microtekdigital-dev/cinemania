@@ -65,14 +65,21 @@ export default function Player({ embeds: initialEmbeds, slug }: PlayerProps) {
         />
       </div>
       {embeds.length > 1 && (
-        <div className="flex gap-2 mt-3 flex-wrap">
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '12px' }}>
           {embeds.map((e, i) => !failed.has(i) && (
             <button
               key={i}
               onClick={() => setCurrent(i)}
-              className={`px-3 py-1.5 rounded text-xs font-semibold transition ${
-                current === i ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-              }`}
+              style={{
+                padding: '6px 12px',
+                borderRadius: '6px',
+                fontSize: '12px',
+                fontWeight: '600',
+                border: 'none',
+                cursor: 'pointer',
+                backgroundColor: current === i ? '#2563eb' : '#374151',
+                color: current === i ? '#ffffff' : '#d1d5db',
+              }}
             >
               {e.lang} {i + 1}
             </button>

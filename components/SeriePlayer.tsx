@@ -109,20 +109,30 @@ export default function SeriePlayer({ tmdbId, totalSeasons, embeds = [], serieSl
         </select>
       </div>
 
-      <div className="flex flex-wrap gap-2 mb-3">
-        {allServers.map((s, idx) => (
-          <button key={idx} onClick={() => setSelectedIdx(idx)}
-            className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
-              selectedIdx === idx ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-            }`}>
-            {getLabel(s)}
-            {s.lang && s.lang !== 'Multilenguaje' && (
-              <span className="ml-1 text-xs opacity-70">({s.lang.split(' ')[0]})</span>
-            )}
-          </button>
-        ))}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '12px' }}>
+        {allServers.map((s, idx) => {
+          const isActive = selectedIdx === idx;
+          return (
+            <button key={idx} onClick={() => setSelectedIdx(idx)}
+              style={{
+                padding: '6px 14px',
+                borderRadius: '8px',
+                fontSize: '13px',
+                fontWeight: '600',
+                border: 'none',
+                cursor: 'pointer',
+                backgroundColor: isActive ? '#2563eb' : '#1f2937',
+                color: isActive ? '#ffffff' : '#d1d5db',
+              }}>
+              {getLabel(s)}
+              {s.lang && s.lang !== 'Multilenguaje' && (
+                <span style={{ marginLeft: '4px', fontSize: '11px', opacity: 0.7 }}>({s.lang.split(' ')[0]})</span>
+              )}
+            </button>
+          );
+        })}
         {loadingCuevana && (
-          <span className="px-4 py-2 text-sm text-gray-500">Cargando...</span>
+          <span style={{ padding: '6px 12px', fontSize: '13px', color: '#6b7280' }}>Cargando...</span>
         )}
       </div>
 
