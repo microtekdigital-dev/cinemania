@@ -4,6 +4,7 @@ import Footer from '@/components/Footer';
 import UserMenu from '@/components/UserMenu';
 import FavoriteButton from '@/components/FavoriteButton';
 import WatchTracker from '@/components/WatchTracker';
+import WatchHistoryTracker from '@/components/WatchHistoryTracker';
 import ReviewSection from '@/components/ReviewSection';
 import MovieRow from '@/components/MovieRow';
 import Logo from '@/components/Logo';
@@ -52,6 +53,7 @@ export default async function MoviePage({ params, searchParams }: { params: Prom
       </header>
 
       {/* Hero con backdrop */}
+      <WatchHistoryTracker slug={movie.slug} />
       <div className="relative w-full h-[60vh] min-h-[400px]">
         {movie.backdrop && (
           <>

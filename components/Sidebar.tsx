@@ -1,7 +1,8 @@
 'use client';
+import { useEffect, useState } from 'react';
 
 export type CategoryId =
-  | 'estrenos' | 'populares' | 'top-rated' | 'proximos'
+  | 'estrenos' | 'populares' | 'top-rated' | 'ultimas-vistas'
   | 'locales-ar' | 'locales-mx' | 'locales-es'
   | 'series-popular' | 'series-ultimas' | 'series-mejores';
 
@@ -9,7 +10,7 @@ export const CATEGORY_TITLES: Record<CategoryId, string> = {
   'estrenos':        'Estrenos',
   'populares':       'Películas Populares',
   'top-rated':       'Top Rated',
-  'proximos':        'Próximos Estrenos',
+  'ultimas-vistas':  'Últimas Vistas',
   'locales-ar':      'Películas Argentinas',
   'locales-mx':      'Películas Mexicanas',
   'locales-es':      'Películas Españolas',
@@ -22,10 +23,10 @@ const SECTIONS = [
   {
     title: 'PELÍCULAS BOX OFFICE',
     items: [
-      { id: 'estrenos' as CategoryId,  label: 'Estrenos' },
-      { id: 'populares' as CategoryId, label: 'Populares' },
-      { id: 'top-rated' as CategoryId, label: 'Top Rated' },
-      { id: 'proximos' as CategoryId,  label: 'Próximos' },
+      { id: 'estrenos' as CategoryId,       label: 'Estrenos' },
+      { id: 'populares' as CategoryId,      label: 'Populares' },
+      { id: 'top-rated' as CategoryId,      label: 'Top Rated' },
+      { id: 'ultimas-vistas' as CategoryId, label: 'Últimas Vistas' },
     ],
   },
   {

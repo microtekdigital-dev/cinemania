@@ -93,7 +93,17 @@ export default function MovieGrid({ genres = [], years = [], countries = [], cat
   useEffect(() => {
     let params: URLSearchParams;
 
-    if (category) {
+    // Últimas vistas — leer de localStorage
+    if (category === 'ultimas-vistas') {
+      try {
+        const history = JSON.parse(localStorage.getItem('watch_history') || '[]') as string[];
+        if (!history.length) { setMovies([]); setTotal(0); setLoading(false); return; }
+        params = new URLSearchParams();
+        params.set('slugs', history.slice(0, 20).join(','));
+      } catch {
+        setMovies([]); setTotal(0); setLoading(false); return;
+      }
+    } else if (category) {
       params = categoryToParams(category);
     } else {
       params = new URLSearchParams();
