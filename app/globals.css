@@ -54,3 +54,15 @@ a:focus, button:focus, [tabindex]:focus {
   outline: 3px solid #3b82f6;
   outline-offset: 2px;
 }
+
+/* Ocultar cursor en TV (pantallas grandes sin mouse) */
+@media (hover: none) and (pointer: coarse) {
+  * { cursor: none !important; }
+}
+
+/* Foco muy visible para TV */
+a:focus-visible, button:focus-visible {
+  outline: 4px solid #3b82f6 !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.3) !important;
+}

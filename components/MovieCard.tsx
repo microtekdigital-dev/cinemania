@@ -17,7 +17,7 @@ interface MovieCardProps {
 
 export default function MovieCard({ movie, linkPrefix = '/pelicula' }: MovieCardProps) {
   return (
-    <Link href={`${linkPrefix}/${movie.slug}`} className="group block">
+    <Link href={`${linkPrefix}/${movie.slug}`} className="group block" tabIndex={0}>
       <div className="relative overflow-hidden rounded-lg bg-gray-800" style={{ paddingBottom: '150%', position: 'relative' }}>
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
         {movie.poster
