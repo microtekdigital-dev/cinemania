@@ -9,12 +9,16 @@ interface SidebarLayoutProps {
   genres?: string[];
   years?: string[];
   countries?: string[];
+  initialMovies?: any[];
+  initialTotal?: number;
 }
 
 export default function SidebarLayout({
   genres = [],
   years = [],
   countries = [],
+  initialMovies = [],
+  initialTotal = 0,
 }: SidebarLayoutProps) {
   const [activeCategory, setActiveCategory] = useState<CategoryId>('populares');
 
@@ -35,6 +39,8 @@ export default function SidebarLayout({
           genres={genres}
           years={years}
           countries={countries}
+          initialMovies={activeCategory === 'populares' ? initialMovies : []}
+          initialTotal={activeCategory === 'populares' ? initialTotal : 0}
         />
       </main>
     </div>

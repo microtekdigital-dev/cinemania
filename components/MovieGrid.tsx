@@ -27,6 +27,8 @@ interface MovieGridProps {
   years?: string[];
   countries?: string[];
   category?: CategoryId;
+  initialMovies?: Movie[];
+  initialTotal?: number;
 }
 
 function categoryToParams(cat: CategoryId): URLSearchParams {
@@ -66,15 +68,15 @@ function categoryToParams(cat: CategoryId): URLSearchParams {
   return params;
 }
 
-export default function MovieGrid({ genres = [], years = [], countries = [], category }: MovieGridProps) {
+export default function MovieGrid({ genres = [], years = [], countries = [], category, initialMovies = [], initialTotal = 0 }: MovieGridProps) {
   const [search, setSearch] = useState('');
   const [genre, setGenre] = useState('');
   const [year, setYear] = useState('');
   const [country, setCountry] = useState('');
   const [page, setPage] = useState(1);
-  const [movies, setMovies] = useState<Movie[]>([]);
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [movies, setMovies] = useState<Movie[]>(initialMovies);
+  const [total, setTotal] = useState(initialTotal || initialMovies.length);
+  const [loading, setLoading] = useState(initialMovies.length === 0);
 
   // Reset when category changes
   useEffect(() => {
