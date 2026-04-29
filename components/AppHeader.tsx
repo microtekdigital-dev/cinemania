@@ -11,7 +11,7 @@ interface AppHeaderProps {
 export default function AppHeader({ movies = [], series = [], activePage }: AppHeaderProps) {
   const navLinks = [
     { href: '/', label: 'Inicio', page: 'home' },
-    { href: '/peliculas', label: 'Películas', page: 'peliculas' },
+    { href: '/', label: 'Películas', page: 'peliculas' },
     { href: '/series', label: 'Series', page: 'series' },
   ];
 
