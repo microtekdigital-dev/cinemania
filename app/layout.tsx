@@ -37,7 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <link rel="manifest" href="/manifest.json" />
       </head>
-      <body className={`${inter.variable} ${bebas.variable} ${inter.className} min-h-full flex flex-col bg-gray-950 text-white`} style={{ backgroundColor: '#030712', color: '#ffffff', margin: 0 }}>
+      <body className={`${inter.variable} ${bebas.variable} ${inter.className} min-h-full flex flex-col bg-gray-950 text-white`} style={{ backgroundColor: '#030712', color: '#ffffff', margin: 0, padding: 0 }}>
         <TVKeyboardNav />
         {children}
       </body>
