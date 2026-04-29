@@ -91,38 +91,39 @@ export default function SeriePlayer({ tmdbId, totalSeasons, embeds = [], serieSl
   }
 
   return (
-    <div>
+    <div style={{ maxWidth: '960px', margin: '0 auto' }}>
       <h2 className="text-lg font-bold mb-3">Ver Online</h2>
 
-      <div className="flex flex-wrap gap-3 mb-4">
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '16px' }}>
         <select value={season} onChange={e => { setSeason(Number(e.target.value)); setEpisode(1); setSelectedIdx(0); }}
-          className="bg-gray-800 text-white px-4 py-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500">
+          style={{ backgroundColor: '#1f2937', color: 'white', padding: '10px 16px', borderRadius: '8px', fontSize: '14px', border: '1px solid #374151', minWidth: '140px' }}>
           {Array.from({ length: totalSeasons }, (_, i) => (
             <option key={i + 1} value={i + 1}>Temporada {i + 1}</option>
           ))}
         </select>
         <select value={episode} onChange={e => { setEpisode(Number(e.target.value)); setSelectedIdx(0); }}
-          className="bg-gray-800 text-white px-4 py-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500">
+          style={{ backgroundColor: '#1f2937', color: 'white', padding: '10px 16px', borderRadius: '8px', fontSize: '14px', border: '1px solid #374151', minWidth: '140px' }}>
           {Array.from({ length: episodeCount }, (_, i) => (
             <option key={i + 1} value={i + 1}>Episodio {i + 1}</option>
           ))}
         </select>
       </div>
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '12px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '16px', justifyContent: 'center' }}>
         {allServers.map((s, idx) => {
           const isActive = selectedIdx === idx;
           return (
-            <button key={idx} onClick={() => setSelectedIdx(idx)}
+            <button key={idx} onClick={() => setSelectedIdx(idx)} tabIndex={0}
               style={{
-                padding: '6px 14px',
+                padding: '12px 20px',
                 borderRadius: '8px',
-                fontSize: '13px',
-                fontWeight: '600',
+                fontSize: '14px',
+                fontWeight: '700',
                 border: 'none',
                 cursor: 'pointer',
-                backgroundColor: isActive ? '#2563eb' : '#1f2937',
+                backgroundColor: isActive ? '#2563eb' : '#374151',
                 color: isActive ? '#ffffff' : '#d1d5db',
+                minWidth: '80px',
               }}>
               {getLabel(s)}
               {s.lang && s.lang !== 'Multilenguaje' && (
@@ -132,16 +133,16 @@ export default function SeriePlayer({ tmdbId, totalSeasons, embeds = [], serieSl
           );
         })}
         {loadingCuevana && (
-          <span style={{ padding: '6px 12px', fontSize: '13px', color: '#6b7280' }}>Cargando...</span>
+          <span style={{ padding: '12px', fontSize: '13px', color: '#6b7280' }}>Cargando...</span>
         )}
       </div>
 
-      <div className="aspect-video rounded-xl overflow-hidden bg-gray-900">
+      <div style={{ position: 'relative', paddingBottom: '56.25%', backgroundColor: '#000', borderRadius: '8px', overflow: 'hidden' }}>
         {currentUrl && (
           <iframe
             key={`${selectedIdx}-${season}-${episode}`}
             src={currentUrl}
-            className="w-full h-full"
+            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
             allowFullScreen
             allow="autoplay; fullscreen; encrypted-media"
           />

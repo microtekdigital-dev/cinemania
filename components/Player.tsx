@@ -53,35 +53,37 @@ export default function Player({ embeds: initialEmbeds, slug }: PlayerProps) {
   );
 
   return (
-    <div>
-      <div className="aspect-video w-full bg-black rounded-lg overflow-hidden">
+    <div style={{ maxWidth: '960px', margin: '0 auto' }}>
+      <div style={{ position: 'relative', paddingBottom: '56.25%', backgroundColor: '#000', borderRadius: '8px', overflow: 'hidden' }}>
         <iframe
           key={current}
           src={embeds[current]?.url}
-          className="w-full h-full"
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
           allowFullScreen
           allow="autoplay; fullscreen; encrypted-media"
           onError={() => setFailed(prev => new Set([...prev, current]))}
         />
       </div>
       {embeds.length > 1 && (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '12px' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '16px', justifyContent: 'center' }}>
           {embeds.map((e, i) => !failed.has(i) && (
             <button
               key={i}
               onClick={() => setCurrent(i)}
+              tabIndex={0}
               style={{
-                padding: '6px 12px',
-                borderRadius: '6px',
-                fontSize: '12px',
-                fontWeight: '600',
+                padding: '12px 20px',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: '700',
                 border: 'none',
                 cursor: 'pointer',
                 backgroundColor: current === i ? '#2563eb' : '#374151',
                 color: current === i ? '#ffffff' : '#d1d5db',
+                minWidth: '80px',
               }}
             >
-              {e.lang} {i + 1}
+              {e.server || e.lang} {i + 1}
             </button>
           ))}
         </div>
