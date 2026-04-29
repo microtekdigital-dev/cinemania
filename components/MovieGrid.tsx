@@ -189,12 +189,14 @@ export default function MovieGrid({ genres = [], years = [], countries = [], cat
         </div>
       )}
 
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
         {movies.map((movie, i) => (
-          <MovieCard key={`${movie.slug}-${i}`} movie={movie} linkPrefix={linkPrefix as '/pelicula' | '/serie'} />
+          <div key={`${movie.slug}-${i}`} style={{ width: 'calc(16.666% - 10px)', minWidth: '120px' }}>
+            <MovieCard movie={movie} linkPrefix={linkPrefix as '/pelicula' | '/serie'} />
+          </div>
         ))}
         {loading && movies.length === 0 && Array.from({ length: 18 }).map((_, i) => (
-          <div key={i} className="animate-pulse">
+          <div key={i} style={{ width: 'calc(16.666% - 10px)', minWidth: '120px' }} className="animate-pulse">
             <div className="aspect-[2/3] rounded-lg bg-gray-800" />
             <div className="h-2.5 bg-gray-800 rounded mt-2 w-3/4" />
           </div>
