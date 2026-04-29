@@ -57,8 +57,8 @@ export default function SearchBar({ movies, series = [] }: Props) {
 
   return (
     <div ref={ref} className="relative w-full max-w-md" style={{ maxWidth: '400px' }}>
-      <div className="flex items-center bg-gray-800/80 border border-gray-700 rounded-full px-4 py-2 gap-2 focus-within:border-blue-500 transition">
-        <svg className="w-4 h-4 text-gray-400 shrink-0" style={{ width: '16px', height: '16px', minWidth: '16px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#1f2937', border: '1px solid #374151', borderRadius: '24px', padding: '8px 16px', gap: '8px' }}>
+        <svg style={{ width: '16px', height: '16px', minWidth: '16px', color: '#9ca3af' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
         </svg>
         <input
@@ -66,10 +66,10 @@ export default function SearchBar({ movies, series = [] }: Props) {
           value={query}
           onChange={e => setQuery(e.target.value)}
           placeholder="Buscar películas y series..."
-          className="bg-transparent text-white text-sm outline-none w-full placeholder-gray-500"
+          style={{ backgroundColor: 'transparent', color: 'white', fontSize: '14px', outline: 'none', width: '100%', border: 'none' }}
         />
         {query && (
-          <button onClick={() => { setQuery(''); setOpen(false); }} className="text-gray-400 hover:text-white">✕</button>
+          <button onClick={() => { setQuery(''); setOpen(false); }} style={{ color: '#9ca3af', background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px' }}>✕</button>
         )}
       </div>
 
