@@ -62,10 +62,10 @@ export default async function MoviePage({ params }: { params: Promise<{ slug: st
           <div className="max-w-2xl">
             <h1 className="text-3xl sm:text-4xl font-black mb-2 leading-tight">{movie.title}</h1>
             <div className="flex flex-wrap items-center gap-3 text-sm text-gray-300 mb-3">
-              <span className="text-yellow-400 font-bold">⭐ {movie.rating}</span>
-              <span>{movie.year}</span>
+              <span className="text-yellow-400 font-bold mr-2">⭐ {movie.rating}</span>
+              <span className="mr-2">{movie.year}</span>
               {movie.genre?.slice(0, 3).map((g: string) => (
-                <span key={g} className="bg-white/10 px-2 py-0.5 rounded-full text-xs">{g}</span>
+                <span key={g} className="bg-white/10 px-2 py-0.5 rounded-full text-xs mr-1">{g}</span>
               ))}
             </div>
             <p className="text-gray-300 text-sm leading-relaxed line-clamp-3 mb-5 max-w-lg">{movie.overview}</p>
